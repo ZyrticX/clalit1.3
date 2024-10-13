@@ -14,82 +14,97 @@ setInterval(updateDateTime, 1000);
 updateDateTime();
 
 const tasksData = [
-    { department: 'מחלקה א1', tasks: [
-        { name: 'טיטולים', completed: false },
-        { name: 'ציוד רפואי', completed: false },
-        { name: 'מזון', completed: false }
-    ]},
-    { department: 'מחלקה א2', tasks: [
-        { name: 'טיטולים', completed: false },
-        { name: 'ציוד רפואי', completed: false },
-        { name: 'מזון', completed: false }
-    ]},
-    { department: 'מחלקה ו1', tasks: [
-        { name: 'טיטולים', completed: false },
-        { name: 'ציוד רפואי', completed: false },
-        { name: 'מזון', completed: false }
-    ]},
-    { department: 'מחלקה ו2', tasks: [
-        { name: 'טיטולים', completed: false },
-        { name: 'ציוד רפואי', completed: false },
-        { name: 'מזון', completed: false }
-    ]},
-    { department: 'מחלקה ב\'', tasks: [
-        { name: 'טיטולים', completed: false },
-        { name: 'ציוד רפואי', completed: false },
-        { name: 'מזון', completed: false }
-    ]},
-    { department: 'מחלקה ה\'', tasks: [
-        { name: 'טיטולים', completed: false },
-        { name: 'ציוד רפואי', completed: false },
-        { name: 'מזון', completed: false }
-    ]},
-    { department: 'מחלקה ד1', tasks: [
-        { name: 'טיטולים', completed: false },
-        { name: 'ציוד רפואי', completed: false },
-        { name: 'מזון', completed: false }
-    ]},
-    { department: 'מחלקה ד2', tasks: [
-        { name: 'טיטולים', completed: false },
-        { name: 'ציוד רפואי', completed: false },
-        { name: 'מזון', completed: false }
-    ]},
-    { department: 'מחלקה ג\'', tasks: [
-        { name: 'טיטולים', completed: false },
-        { name: 'ציוד רפואי', completed: false },
-        { name: 'מזון', completed: false }
-    ]}
+    { department: 'מחלקה א1', tasks: { טיטולים: false, 'ציוד רפואי': false, מזון: false } },
+    { department: 'מחלקה א2', tasks: { טיטולים: false, 'ציוד רפואי': false, מזון: false } },
+    { department: 'מחלקה ו1', tasks: { טיטולים: false, 'ציוד רפואי': false, מזון: false } },
+    { department: 'מחלקה ו2', tasks: { טיטולים: false, 'ציוד רפואי': false, מזון: false } },
+    { department: 'מחלקה ב\'', tasks: { טיטולים: false, 'ציוד רפואי': false, מזון: false } },
+    { department: 'מחלקה ה\'', tasks: { טיטולים: false, 'ציוד רפואי': false, מזון: false } },
+    { department: 'מחלקה ד1', tasks: { טיטולים: false, 'ציוד רפואי': false, מזון: false } },
+    { department: 'מחלקה ד2', tasks: { טיטולים: false, 'ציוד רפואי': false, מזון: false } },
+    { department: 'מחלקה ג\'', tasks: { טיטולים: false, 'ציוד רפואי': false, מזון: false } }
 ];
 
-const tasksContainer = document.getElementById('tasksContainer');
+const tasksTable = document.getElementById('tasksTable').getElementsByTagName('tbody')[0];
 
 const populateTasks = () => {
-    tasksContainer.innerHTML = '';
+    tasksTable.innerHTML = '';
     tasksData.forEach((dept, deptIndex) => {
-        const deptElement = document.createElement('div');
-        deptElement.className = 'department';
-        deptElement.innerHTML = `<h2>${dept.department}</h2>`;
+        const row = tasksTable.insertRow();
+        row.insertCell(0).textContent = dept.department;
         
-        dept.tasks.forEach((task, taskIndex) => {
-            const taskElement = document.createElement('div');
-            taskElement.className = 'task';
-            taskElement.innerHTML = `
-                <span>${task.name}</span>
-                <label class="checkbox-container">
-                    <input type="checkbox" ${task.completed ? 'checked' : ''} 
-                           ${currentUser === 'גיל' || currentUser === 'ארתור' ? 'disabled' : ''}
-                           data-dept="${deptIndex}" data-task="${taskIndex}">
-                    <span class="checkmark"></span>
-                </label>
-                <span class="status ${task.completed ? 'completed' : 'not-completed'}">
-                    ${task.completed ? 'בוצע' : 'לא בוצע'}
-                </span>
-            `;
-            deptElement.appendChild(taskElement);
+        ['טיטולים', 'ציוד רפואי', 'מזון'].forEach((taskName, taskIndex) => {
+            const cell = row.insertCell(taskIndex + 1);
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = dept.tasks[taskName];
+            checkbox.disabled = (currentUser === 'גיל' || currentUser === 'ארתור');
+            checkbox.dataset.dept = deptIndex;
+            checkbox.dataset.task = taskName;
+            
+            const label = document.createElement('label');
+            label.className = 'checkbox-container';
+            label.appendChild(checkbox);
+            
+            const span = document.createElement('span');
+            span.className = 'checkmark';
+            label.appendChild(span);
+            
+            cell.appendChild(label);
         });
-        tasksContainer.appendChild(deptElement);
     });
     updateProgress();
 };
 
-// Rest of the code remains the same...
+tasksTable.addEventListener('change', (event) => {
+    if (event.target.type === 'checkbox') {
+        const deptIndex = event.target.dataset.dept;
+        const taskName = event.target.dataset.task;
+        tasksData[deptIndex].tasks[taskName] = event.target.checked;
+        updateProgress();
+    }
+});
+
+const progressBar = document.getElementById('progress');
+const updateProgress = () => {
+    const totalTasks = tasksData.length * 3;  // 3 tasks per department
+    const completedTasks = tasksData.reduce((sum, dept) => 
+        sum + Object.values(dept.tasks).filter(Boolean).length, 0);
+    const progressPercentage = Math.round((completedTasks / totalTasks) * 100);
+    progressBar.style.width = `${progressPercentage}%`;
+    progressBar.textContent = `${progressPercentage}%`;
+};
+
+document.getElementById('saveButton').addEventListener('click', () => {
+    alert('השינויים נשמרו בהצלחה!');
+    localStorage.setItem('tasksData', JSON.stringify(tasksData));
+});
+
+function checkBreakTimes() {
+    const now = new Date();
+    const currentTime = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const breakMessage = document.getElementById('breakMessage');
+
+    if (currentTime >= '10:30' && currentTime < '10:45') {
+        breakMessage.textContent = 'הפסקה עד 10:45';
+        breakMessage.style.display = 'block';
+    } else if (currentTime >= '12:00' && currentTime < '12:20') {
+        breakMessage.textContent = 'הפסקת אוכל עד 12:20';
+        breakMessage.style.display = 'block';
+    } else if (currentTime >= '13:45' && currentTime < '14:00') {
+        breakMessage.textContent = 'הפסקה עד 14:00';
+        breakMessage.style.display = 'block';
+    } else {
+        breakMessage.style.display = 'none';
+    }
+}
+
+setInterval(checkBreakTimes, 60000);
+checkBreakTimes();
+
+const savedTasksData = localStorage.getItem('tasksData');
+if (savedTasksData) {
+    tasksData.splice(0, tasksData.length, ...JSON.parse(savedTasksData));
+}
+
+populateTasks();
