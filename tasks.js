@@ -50,7 +50,12 @@ const populateTasks = () => {
             span.className = 'checkmark';
             label.appendChild(span);
             
+            const status = document.createElement('span');
+            status.className = `status ${dept.tasks[taskName] ? 'completed' : 'not-completed'}`;
+            status.textContent = dept.tasks[taskName] ? 'בוצע' : 'לא בוצע';
+            
             cell.appendChild(label);
+            cell.appendChild(status);
         });
     });
     updateProgress();
@@ -61,6 +66,9 @@ tasksTable.addEventListener('change', (event) => {
         const deptIndex = event.target.dataset.dept;
         const taskName = event.target.dataset.task;
         tasksData[deptIndex].tasks[taskName] = event.target.checked;
+        const statusSpan = event.target.closest('td').querySelector('.status');
+        statusSpan.textContent = event.target.checked ? 'בוצע' : 'לא בוצע';
+        statusSpan.className = `status ${event.target.checked ? 'completed' : 'not-completed'}`;
         updateProgress();
     }
 });
