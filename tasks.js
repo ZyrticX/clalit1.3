@@ -1,6 +1,6 @@
 const currentUser = localStorage.getItem('currentUser');
 const usernameDisplay = document.getElementById('usernameDisplay');
-usernameDisplay.textContent = currentUser.charAt(0).toUpperCase() + currentUser.slice(1);
+usernameDisplay.textContent = currentUser;
 
 const dateDisplay = document.getElementById('dateDisplay');
 const timeDisplay = document.getElementById('timeDisplay');
@@ -17,7 +17,30 @@ const tasksData = [
     { department: 'מחלקה א1', task: 'ציוד רפואי', completed: false },
     { department: 'מחלקה א1', task: 'טיטולים', completed: false },
     { department: 'מחלקה א1', task: 'מזון', completed: false },
-    // Add more tasks here...
+    { department: 'מחלקה א2', task: 'ציוד רפואי', completed: false },
+    { department: 'מחלקה א2', task: 'טיטולים', completed: false },
+    { department: 'מחלקה א2', task: 'מזון', completed: false },
+    { department: 'מחלקה ו1', task: 'ציוד רפואי', completed: false },
+    { department: 'מחלקה ו1', task: 'טיטולים', completed: false },
+    { department: 'מחלקה ו1', task: 'מזון', completed: false },
+    { department: 'מחלקה ו2', task: 'ציוד רפואי', completed: false },
+    { department: 'מחלקה ו2', task: 'טיטולים', completed: false },
+    { department: 'מחלקה ו2', task: 'מזון', completed: false },
+    { department: 'מחלקה ב\'', task: 'ציוד רפואי', completed: false },
+    { department: 'מחלקה ב\'', task: 'טיטולים', completed: false },
+    { department: 'מחלקה ב\'', task: 'מזון', completed: false },
+    { department: 'מחלקה ה\'', task: 'ציוד רפואי', completed: false },
+    { department: 'מחלקה ה\'', task: 'טיטולים', completed: false },
+    { department: 'מחלקה ה\'', task: 'מזון', completed: false },
+    { department: 'מחלקה ד1', task: 'ציוד רפואי', completed: false },
+    { department: 'מחלקה ד1', task: 'טיטולים', completed: false },
+    { department: 'מחלקה ד1', task: 'מזון', completed: false },
+    { department: 'מחלקה ד2', task: 'ציוד רפואי', completed: false },
+    { department: 'מחלקה ד2', task: 'טיטולים', completed: false },
+    { department: 'מחלקה ד2', task: 'מזון', completed: false },
+    { department: 'מחלקה ג\'', task: 'ציוד רפואי', completed: false },
+    { department: 'מחלקה ג\'', task: 'טיטולים', completed: false },
+    { department: 'מחלקה ג\'', task: 'מזון', completed: false },
 ];
 
 const tasksTable = document.getElementById('tasksTable').getElementsByTagName('tbody')[0];
@@ -35,9 +58,11 @@ const populateTasks = () => {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.checked = task.completed;
-        checkbox.disabled = (currentUser === 'gil' || currentUser === 'arthur');
+        checkbox.disabled = (currentUser === 'גיל' || currentUser === 'ארתור');
         checkbox.addEventListener('change', () => {
             task.completed = checkbox.checked;
+            statusCell.textContent = task.completed ? 'בוצע' : 'לא בוצע';
+            statusCell.className = task.completed ? 'completed' : '';
             updateProgress();
         });
         actionCell.appendChild(checkbox);
@@ -81,10 +106,9 @@ function checkBreakTimes() {
 setInterval(checkBreakTimes, 60000);
 checkBreakTimes();
 
-populateTasks();
-
 const savedTasksData = localStorage.getItem('tasksData');
 if (savedTasksData) {
     tasksData.splice(0, tasksData.length, ...JSON.parse(savedTasksData));
-    populateTasks();
 }
+
+populateTasks();
