@@ -1,7 +1,7 @@
 function login() {
-    const username = document.getElementById('username').value.toLowerCase();
-    const managers = ['arthur', 'gil'];
-    const workers = ['evgeniy', 'valery', 'eran'];
+    const username = document.getElementById('username').value;
+    const managers = ['ארתור', 'גיל'];
+    const workers = ['יבגני', 'ולרי', 'ערן'];
 
     if (username === '') {
         alert('נא להזין שם משתמש');
