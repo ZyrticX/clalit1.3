@@ -2,40 +2,49 @@
     --olive-green: #556B2F;
     --light-gray: #f0f0f0;
     --dark-gray: #333333;
+    --completed-green: #4CAF50;
+    --not-completed-red: #F44336;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     margin: 0;
+    padding: 0;
     background-color: var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .container, .login-container, .loading-container {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    text-align: center;
     max-width: 800px;
-    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.logo {
+    width: 150px;
+    margin-bottom: 20px;
 }
 
 h1 {
     color: var(--olive-green);
-    margin-bottom: 1.5rem;
+    margin-bottom: 20px;
 }
 
-input, button {
+select, input, button {
     display: block;
     width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
+    padding: 10px;
+    margin-bottom: 10px;
     border: 1px solid var(--light-gray);
     border-radius: 4px;
+    font-size: 16px;
 }
 
 button {
@@ -50,28 +59,41 @@ button:hover {
     background-color: #445624;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-}
-
-th, td {
-    border: 1px solid var(--light-gray);
-    padding: 0.5rem;
-    text-align: right;
-}
-
-th {
-    background-color: var(--olive-green);
+.datetime {
+    text-align: center;
+    padding: 10px;
+    background-color: var(--dark-gray);
     color: white;
+    font-size: 0.8em;
 }
 
+.spinner {
+    border: 4px solid var(--light-gray);
+    border-top: 4px solid var(--olive-green);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#funMessage {
+    margin-top: 20px;
+    font-style: italic;
+    color: var(--olive-green);
+}
+
+/* Existing styles for tasks page */
 .progress-bar {
     width: 100%;
     background-color: var(--light-gray);
     border-radius: 4px;
-    margin: 1rem 0;
+    margin-bottom: 20px;
 }
 
 .progress {
@@ -84,45 +106,116 @@ th {
     color: white;
 }
 
-.status-container {
+.department {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.department h2 {
+    color: var(--olive-green);
+    border-bottom: 2px solid var(--olive-green);
+    padding-bottom: 5px;
+}
+
+.task {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.checkbox-container {
+    display: inline-block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    user-select: none;
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+    background-color: var(--completed-green);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox-container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+.status {
+    font-weight: bold;
+}
+
+.status.completed {
+    color: var(--completed-green);
+}
+
+.status.not-completed {
+    color: var(--not-completed-red);
 }
 
 #breakMessage {
     background-color: #FFD700;
     color: black;
-    padding: 0.5rem;
+    padding: 10px;
     border-radius: 4px;
+    margin-bottom: 20px;
     display: none;
-}
-
-.spinner {
-    border: 4px solid var(--light-gray);
-    border-top: 4px solid var(--olive-green);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 1rem;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.completed {
-    color: green;
 }
 
 @media (max-width: 600px) {
     .container, .login-container, .loading-container {
-        padding: 1rem;
+        padding: 10px;
     }
     
-    table {
-        font-size: 0.9rem;
+    .task {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .checkbox-container {
+        margin-top: 10px;
+    }
+    
+    .status {
+        margin-top: 5px;
     }
 }
