@@ -1,4 +1,59 @@
-/* ... (previous styles remain the same) ... */
+:root {
+    --olive-green: #556B2F;
+    --light-gray: #f0f0f0;
+    --dark-gray: #333333;
+    --completed-green: #4CAF50;
+    --not-completed-red: #F44336;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--light-gray);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: var(--olive-green);
+    margin: 0;
+}
+
+.datetime {
+    font-size: 0.9em;
+    color: var(--dark-gray);
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: var(--light-gray);
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.progress {
+    width: 0;
+    height: 20px;
+    background-color: var(--olive-green);
+    border-radius: 4px;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+}
 
 table {
     width: 100%;
@@ -42,6 +97,7 @@ th {
     height: 25px;
     width: 25px;
     background-color: #eee;
+    border-radius: 4px;
 }
 
 .checkbox-container:hover input ~ .checkmark {
@@ -72,7 +128,59 @@ th {
     transform: rotate(45deg);
 }
 
-@media (max-width: 600px) {
+.status {
+    display: block;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.status.completed {
+    color: var(--completed-green);
+}
+
+.status.not-completed {
+    color: var(--not-completed-red);
+}
+
+#breakMessage {
+    background-color: #FFD700;
+    color: black;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    display: none;
+    text-align: center;
+}
+
+button {
+    background-color: var(--olive-green);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #445624;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .datetime {
+        margin-top: 10px;
+    }
+
     table, thead, tbody, th, td, tr {
         display: block;
     }
@@ -85,25 +193,32 @@ th {
 
     tr {
         margin-bottom: 15px;
+        border: 1px solid var(--light-gray);
     }
 
     td {
         border: none;
         position: relative;
         padding-left: 50%;
-        text-align: left;
+        text-align: right;
     }
 
     td:before {
+        content: attr(data-label);
         position: absolute;
-        top: 6px;
         left: 6px;
         width: 45%;
         padding-right: 10px;
         white-space: nowrap;
-        content: attr(data-label);
         font-weight: bold;
     }
-}
 
-/* ... (rest of the styles remain the same) ... */
+    .checkbox-container {
+        padding-left: 25px;
+    }
+
+    .checkmark {
+        left: auto;
+        right: 0;
+    }
+}
