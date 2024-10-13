@@ -14,66 +14,67 @@ setInterval(updateDateTime, 1000);
 updateDateTime();
 
 const tasksData = [
-    { department: 'מחלקה א1', task: 'ציוד רפואי', completed: false },
-    { department: 'מחלקה א1', task: 'טיטולים', completed: false },
-    { department: 'מחלקה א1', task: 'מזון', completed: false },
-    { department: 'מחלקה א2', task: 'ציוד רפואי', completed: false },
-    { department: 'מחלקה א2', task: 'טיטולים', completed: false },
-    { department: 'מחלקה א2', task: 'מזון', completed: false },
-    { department: 'מחלקה ו1', task: 'ציוד רפואי', completed: false },
-    { department: 'מחלקה ו1', task: 'טיטולים', completed: false },
-    { department: 'מחלקה ו1', task: 'מזון', completed: false },
-    { department: 'מחלקה ו2', task: 'ציוד רפואי', completed: false },
-    { department: 'מחלקה ו2', task: 'טיטולים', completed: false },
-    { department: 'מחלקה ו2', task: 'מזון', completed: false },
-    { department: 'מחלקה ב\'', task: 'ציוד רפואי', completed: false },
-    { department: 'מחלקה ב\'', task: 'טיטולים', completed: false },
-    { department: 'מחלקה ב\'', task: 'מזון', completed: false },
-    { department: 'מחלקה ה\'', task: 'ציוד רפואי', completed: false },
-    { department: 'מחלקה ה\'', task: 'טיטולים', completed: false },
-    { department: 'מחלקה ה\'', task: 'מזון', completed: false },
-    { department: 'מחלקה ד1', task: 'ציוד רפואי', completed: false },
-    { department: 'מחלקה ד1', task: 'טיטולים', completed: false },
-    { department: 'מחלקה ד1', task: 'מזון', completed: false },
-    { department: 'מחלקה ד2', task: 'ציוד רפואי', completed: false },
-    { department: 'מחלקה ד2', task: 'טיטולים', completed: false },
-    { department: 'מחלקה ד2', task: 'מזון', completed: false },
-    { department: 'מחלקה ג\'', task: 'ציוד רפואי', completed: false },
-    { department: 'מחלקה ג\'', task: 'טיטולים', completed: false },
-    { department: 'מחלקה ג\'', task: 'מזון', completed: false },
+    { department: 'מחלקה א', tasks: [
+        { name: 'טיטולים', completed: false },
+        { name: 'ציוד רפואי', completed: false },
+        { name: 'מזון', completed: false }
+    ]},
+    { department: 'מחלקה ב', tasks: [
+        { name: 'טיטולים', completed: false },
+        { name: 'ציוד רפואי', completed: false },
+        { name: 'מזון', completed: false }
+    ]},
+    // Add more departments as needed
 ];
 
-const tasksTable = document.getElementById('tasksTable').getElementsByTagName('tbody')[0];
+const tasksContainer = document.getElementById('tasksContainer');
 
 const populateTasks = () => {
-    tasksTable.innerHTML = '';
-    tasksData.forEach((task, index) => {
-        const row = tasksTable.insertRow();
-        row.insertCell(0).textContent = task.department;
-        row.insertCell(1).textContent = task.task;
-        const statusCell = row.insertCell(2);
-        statusCell.textContent = task.completed ? 'בוצע' : 'לא בוצע';
-        statusCell.className = task.completed ? 'completed' : '';
-        const actionCell = row.insertCell(3);
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = task.completed;
-        checkbox.disabled = (currentUser === 'גיל' || currentUser === 'ארתור');
-        checkbox.addEventListener('change', () => {
-            task.completed = checkbox.checked;
-            statusCell.textContent = task.completed ? 'בוצע' : 'לא בוצע';
-            statusCell.className = task.completed ? 'completed' : '';
-            updateProgress();
+    tasksContainer.innerHTML = '';
+    tasksData.forEach((dept, deptIndex) => {
+        const deptElement = document.createElement('div');
+        deptElement.className = 'department';
+        deptElement.innerHTML = `<h2>${dept.department}</h2>`;
+        
+        dept.tasks.forEach((task, taskIndex) => {
+            const taskElement = document.createElement('div');
+            taskElement.className = 'task';
+            taskElement.innerHTML = `
+                <span>${task.name}</span>
+                <label class="checkbox-container">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} 
+                           ${currentUser === 'גיל' || currentUser === 'ארתור' ? 'disabled' : ''}
+                           data-dept="${deptIndex}" data-task="${taskIndex}">
+                    <span class="checkmark"></span>
+                </label>
+                <span class="status ${task.completed ? 'completed' : 'not-completed'}">
+                    ${task.completed ? 'בוצע' : 'לא בוצע'}
+                </span>
+            `;
+            deptElement.appendChild(taskElement);
         });
-        actionCell.appendChild(checkbox);
+        tasksContainer.appendChild(deptElement);
     });
     updateProgress();
 };
 
+tasksContainer.addEventListener('change', (event) => {
+    if (event.target.type === 'checkbox') {
+        const deptIndex = event.target.dataset.dept;
+        const taskIndex = event.target.dataset.task;
+        tasksData[deptIndex].tasks[taskIndex].completed = event.target.checked;
+        const statusSpan = event.target.parentElement.nextElementSibling;
+        statusSpan.textContent = event.target.checked ? 'בוצע' : 'לא בוצע';
+        statusSpan.className = `status ${event.target.checked ? 'completed' : 'not-completed'}`;
+        updateProgress();
+    }
+});
+
 const progressBar = document.getElementById('progress');
 const updateProgress = () => {
-    const completedTasks = tasksData.filter(task => task.completed).length;
-    const totalTasks = tasksData.length;
+    const totalTasks = tasksData.reduce((sum, dept) => sum + dept.tasks.length, 0);
+    const completedTasks = tasksData.reduce((sum, dept) => 
+        sum + dept.tasks.filter(task => task.completed).length, 0);
     const progressPercentage = Math.round((completedTasks / totalTasks) * 100);
     progressBar.style.width = `${progressPercentage}%`;
     progressBar.textContent = `${progressPercentage}%`;
