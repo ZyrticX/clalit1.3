@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מעקב משימות - בית רבקה</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>שלום <span id="usernameDisplay"></span></h1>
+        <div class="status-container">
+            <span id="dateDisplay"></span>
+            <span id="timeDisplay"></span>
+            <div id="breakMessage"></div>
+        </div>
+        <div class="progress-bar">
+            <div id="progress" class="progress">0%</div>
+        </div>
+        <table id="tasksTable">
+            <thead>
+                <tr>
+                    <th>מחלקה</th>
+                    <th>משימה</th>
+                    <th>סטטוס</th>
+                    <th>סימון בוצע</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Tasks will be populated here by JavaScript -->
+            </tbody>
+        </table>
+        <button id="saveButton">שמור שינויים</button>
+    </div>
+    <script src="tasks.js"></script>
+</body>
+</html>
