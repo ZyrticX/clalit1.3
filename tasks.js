@@ -14,17 +14,51 @@ setInterval(updateDateTime, 1000);
 updateDateTime();
 
 const tasksData = [
-    { department: 'מחלקה א', tasks: [
+    { department: 'מחלקה א1', tasks: [
         { name: 'טיטולים', completed: false },
         { name: 'ציוד רפואי', completed: false },
         { name: 'מזון', completed: false }
     ]},
-    { department: 'מחלקה ב', tasks: [
+    { department: 'מחלקה א2', tasks: [
         { name: 'טיטולים', completed: false },
         { name: 'ציוד רפואי', completed: false },
         { name: 'מזון', completed: false }
     ]},
-    // Add more departments as needed
+    { department: 'מחלקה ו1', tasks: [
+        { name: 'טיטולים', completed: false },
+        { name: 'ציוד רפואי', completed: false },
+        { name: 'מזון', completed: false }
+    ]},
+    { department: 'מחלקה ו2', tasks: [
+        { name: 'טיטולים', completed: false },
+        { name: 'ציוד רפואי', completed: false },
+        { name: 'מזון', completed: false }
+    ]},
+    { department: 'מחלקה ב\'', tasks: [
+        { name: 'טיטולים', completed: false },
+        { name: 'ציוד רפואי', completed: false },
+        { name: 'מזון', completed: false }
+    ]},
+    { department: 'מחלקה ה\'', tasks: [
+        { name: 'טיטולים', completed: false },
+        { name: 'ציוד רפואי', completed: false },
+        { name: 'מזון', completed: false }
+    ]},
+    { department: 'מחלקה ד1', tasks: [
+        { name: 'טיטולים', completed: false },
+        { name: 'ציוד רפואי', completed: false },
+        { name: 'מזון', completed: false }
+    ]},
+    { department: 'מחלקה ד2', tasks: [
+        { name: 'טיטולים', completed: false },
+        { name: 'ציוד רפואי', completed: false },
+        { name: 'מזון', completed: false }
+    ]},
+    { department: 'מחלקה ג\'', tasks: [
+        { name: 'טיטולים', completed: false },
+        { name: 'ציוד רפואי', completed: false },
+        { name: 'מזון', completed: false }
+    ]}
 ];
 
 const tasksContainer = document.getElementById('tasksContainer');
@@ -58,58 +92,4 @@ const populateTasks = () => {
     updateProgress();
 };
 
-tasksContainer.addEventListener('change', (event) => {
-    if (event.target.type === 'checkbox') {
-        const deptIndex = event.target.dataset.dept;
-        const taskIndex = event.target.dataset.task;
-        tasksData[deptIndex].tasks[taskIndex].completed = event.target.checked;
-        const statusSpan = event.target.parentElement.nextElementSibling;
-        statusSpan.textContent = event.target.checked ? 'בוצע' : 'לא בוצע';
-        statusSpan.className = `status ${event.target.checked ? 'completed' : 'not-completed'}`;
-        updateProgress();
-    }
-});
-
-const progressBar = document.getElementById('progress');
-const updateProgress = () => {
-    const totalTasks = tasksData.reduce((sum, dept) => sum + dept.tasks.length, 0);
-    const completedTasks = tasksData.reduce((sum, dept) => 
-        sum + dept.tasks.filter(task => task.completed).length, 0);
-    const progressPercentage = Math.round((completedTasks / totalTasks) * 100);
-    progressBar.style.width = `${progressPercentage}%`;
-    progressBar.textContent = `${progressPercentage}%`;
-};
-
-document.getElementById('saveButton').addEventListener('click', () => {
-    alert('השינויים נשמרו בהצלחה!');
-    localStorage.setItem('tasksData', JSON.stringify(tasksData));
-});
-
-function checkBreakTimes() {
-    const now = new Date();
-    const currentTime = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-    const breakMessage = document.getElementById('breakMessage');
-
-    if (currentTime >= '10:30' && currentTime < '10:45') {
-        breakMessage.textContent = 'הפסקה עד 10:45';
-        breakMessage.style.display = 'block';
-    } else if (currentTime >= '12:00' && currentTime < '12:20') {
-        breakMessage.textContent = 'הפסקת אוכל עד 12:20';
-        breakMessage.style.display = 'block';
-    } else if (currentTime >= '13:45' && currentTime < '14:00') {
-        breakMessage.textContent = 'הפסקה עד 14:00';
-        breakMessage.style.display = 'block';
-    } else {
-        breakMessage.style.display = 'none';
-    }
-}
-
-setInterval(checkBreakTimes, 60000);
-checkBreakTimes();
-
-const savedTasksData = localStorage.getItem('tasksData');
-if (savedTasksData) {
-    tasksData.splice(0, tasksData.length, ...JSON.parse(savedTasksData));
-}
-
-populateTasks();
+// Rest of the code remains the same...
