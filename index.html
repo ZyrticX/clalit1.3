@@ -8,10 +8,22 @@
 </head>
 <body>
     <div class="login-container">
-        <img src="https://i.postimg.cc/2yhhVCzL/LOGO.jpg" alt="לוגו" style="width: 150px; margin-bottom: 20px;">
+        <img src="https://i.postimg.cc/2yhhVCzL/LOGO.jpg" alt="לוגו" class="logo">
         <h1>התחברות למערכת</h1>
-        <input type="text" id="username" placeholder="שם משתמש" required>
+        <select id="username" required>
+            <option value="">בחר שם</option>
+            <option value="ארתור">ארתור</option>
+            <option value="גיל">גיל</option>
+            <option value="יבגני">יבגני</option>
+            <option value="ולרי">ולרי</option>
+            <option value="ערן">ערן</option>
+        </select>
+        <input type="password" id="password" placeholder="סיסמה (רק למנהלים)" style="display: none;">
         <button onclick="login()">התחבר</button>
+    </div>
+    <div class="datetime">
+        <span id="dateDisplay"></span>
+        <span id="timeDisplay"></span>
     </div>
     <script src="login.js"></script>
 </body>
