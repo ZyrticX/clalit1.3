@@ -8,28 +8,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>שלום <span id="usernameDisplay"></span></h1>
-        <div class="status-container">
-            <span id="dateDisplay"></span>
-            <span id="timeDisplay"></span>
-            <div id="breakMessage"></div>
-        </div>
+        <header>
+            <h1>שלום <span id="usernameDisplay"></span></h1>
+            <div class="datetime">
+                <span id="dateDisplay"></span>
+                <span id="timeDisplay"></span>
+            </div>
+        </header>
+        <div id="breakMessage"></div>
         <div class="progress-bar">
             <div id="progress" class="progress">0%</div>
         </div>
-        <table id="tasksTable">
-            <thead>
-                <tr>
-                    <th>-מחלקה</th>
-                    <th>משימה</th>
-                    <th>סטטוס</th>
-                    <th>סימון בוצע</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Tasks will be populated here by JavaScript -->
-            </tbody>
-        </table>
+        <div id="tasksContainer">
+            <!-- Tasks will be populated here by JavaScript -->
+        </div>
         <button id="saveButton">שמור שינויים</button>
     </div>
     <script src="tasks.js"></script>
