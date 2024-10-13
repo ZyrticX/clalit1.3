@@ -9,7 +9,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     background-color: var(--light-gray);
 }
@@ -20,6 +20,8 @@ body {
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     text-align: center;
+    max-width: 800px;
+    width: 100%;
 }
 
 h1 {
@@ -113,4 +115,14 @@ th {
 
 .completed {
     color: green;
+}
+
+@media (max-width: 600px) {
+    .container, .login-container, .loading-container {
+        padding: 1rem;
+    }
+    
+    table {
+        font-size: 0.9rem;
+    }
 }
